@@ -8,35 +8,25 @@
 <script>
 function onloadFn() {
 
-	alert("1")
 	var apiKey = sessionStorage.getItem('apikey');
 	if(apiKey == null){
 		apiKey = prompt("Premiumize API-Key", "");
 		sessionStorage.setItem('apikey', apiKey);
 	}
-	alert("2")
 	const folderBaseUrl = 'https://www.premiumize.me/api/folder/list?apikey=' + apiKey;
 
 	var queryString = window.location.search;
-	alert(queryString)
-	console.log(queryString);
-	//var urlParams = new URLSearchParams(queryString);
-		alert("3")
 	var folderUrl = folderBaseUrl;
 	if(queryString != null && queryString != '') {
-		alert("3.1")
 		var folderId = queryString.split("folder=")[1]
-		alert("3.2 " + folderId)
 		folderUrl = folderUrl + '&id=' + folderId
 	}
-	alert("4")
 	// url (required), options (optional)
 	fetch(folderUrl, {
 	    method: 'get'
 	})
 	.then(response => response.json())
   	.then(function(data) {
-	alert("5")
 		var subfolders = data.content;
 		for (var i = 0; i < subfolders.length; i++){
 
@@ -60,7 +50,6 @@ function onloadFn() {
 		}
 
 	}).catch(function(err) {
-			alert("6")
 	    console.error('Could not load folder, removing api-key')
 	    sessionStorage.removeItem('apikey');
 	});
