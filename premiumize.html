@@ -1,0 +1,65 @@
+
+<!DOCTYPE html>
+<html>
+<body onload="onloadFn()">
+
+<h1>Premiumize Simple Folder Viewer</h1>
+
+<script>
+function onloadFn() {
+
+	var apiKey = sessionStorage.getItem('apikey');
+	if(apiKey == null){
+		apiKey = prompt("Premiumize API-Key", "");
+		sessionStorage.setItem('apikey', apiKey);
+	}
+
+	const folderBaseUrl = 'https://www.premiumize.me/api/folder/list?apikey=' + apiKey;
+
+	var queryString = window.location.search;
+	console.log(queryString);
+	var urlParams = new URLSearchParams(queryString);
+	
+	var folderUrl = folderBaseUrl;
+	if(urlParams.has('folder')) {
+		folderUrl = folderUrl + '&id=' + urlParams.get('folder')
+	}
+
+	// url (required), options (optional)
+	fetch(folderUrl, {
+	    method: 'get'
+	})
+	.then(response => response.json())
+  	.then(function(data) {
+
+		var subfolders = data.content;
+		for (var i = 0; i < subfolders.length; i++){
+
+			if(subfolders[i].name == null || subfolders[i].name == '' || subfolders[i].name == ' '){
+				continue
+			}
+
+			var elemA = document.createElement('a');
+			elemA.style.cssText = 'display: block;';
+
+			if(subfolders[i].type == 'folder'){
+				elemA.innerHTML = 'Folder: ' + subfolders[i].name; 
+				elemA.href = '?folder=' + subfolders[i].id;
+			}
+			else if(subfolders[i].type == 'file') {
+				elemA.innerHTML = 'File: ' + subfolders[i].name; 
+				elemA.href = 'https://www.premiumize.me/file?id=' + subfolders[i].id;
+			}
+
+			document.body.appendChild(elemA);
+		}
+
+	}).catch(function(err) {
+	    console.error('Could not load folder, removing api-key')
+	    sessionStorage.removeItem('apikey');
+	});
+}
+</script>
+
+</body>
+</html>
