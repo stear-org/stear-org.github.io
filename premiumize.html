@@ -18,12 +18,16 @@ function onloadFn() {
 	const folderBaseUrl = 'https://www.premiumize.me/api/folder/list?apikey=' + apiKey;
 
 	var queryString = window.location.search;
+	alert(queryString)
 	console.log(queryString);
-	var urlParams = new URLSearchParams(queryString);
+	//var urlParams = new URLSearchParams(queryString);
 		alert("3")
 	var folderUrl = folderBaseUrl;
-	if(urlParams.has('folder')) {
-		folderUrl = folderUrl + '&id=' + urlParams.get('folder')
+	if(queryString != null && queryString != '') {
+		alert("3.1")
+		var folderId = queryString.split("folder=")[1]
+		alert("3.2 " + folderId)
+		folderUrl = folderUrl + '&id=' + folderId
 	}
 	alert("4")
 	// url (required), options (optional)
